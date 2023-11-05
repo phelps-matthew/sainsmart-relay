@@ -11,7 +11,7 @@ logging.basicConfig(
 )
 
 
-def accept_wrapper(sock):
+def accept_wrapper(sock, sel):
     conn, addr = sock.accept()
     # Proper use of logging with multiple arguments
     logging.info("Accepted connection from %s", addr)
@@ -21,7 +21,7 @@ def accept_wrapper(sock):
     sel.register(conn, events, data=data)
 
 
-def service_connection(key, mask):
+def service_connection(key, mask, sel, relay):
     sock = key.fileobj
     data = key.data
     if mask & selectors.EVENT_READ:
@@ -109,9 +109,9 @@ def run_server(lsock, sel, relay):
             events = sel.select(timeout=None)
             for key, mask in events:
                 if key.data is None:
-                    accept_wrapper(key.fileobj)
+                    accept_wrapper(key.fileobj, sel)
                 else:
-                    service_connection(key, mask)
+                    service_connection(key, mask, sel, relay)
     except KeyboardInterrupt:
         logging.info("Caught keyboard interrupt, exiting")
     except Exception as e:
@@ -123,8 +123,10 @@ def run_server(lsock, sel, relay):
         logging.info("Server shut down.")
 
 
+def main():
+    lsock, sel, relay = setup_server()
+    run_server(lsock, sel, relay)
 
 # Now the actual entry point is much cleaner
 if __name__ == "__main__":
-    lsock, sel, relay = setup_server()
-    run_server(lsock, sel, relay)
+    main()
