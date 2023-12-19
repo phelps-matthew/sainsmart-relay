@@ -4,7 +4,28 @@ The `sainsmart_relay` library provides an interface and command-line tools to co
 
 ## Installation
 
-To install the library, ensure you have Python 3.8 or newer.
+### Linux Prerequisites
+
+The FTDI USB drivers should be installed by default in most debian distributions. If not, try:
+```bash
+sudo apt install libftdi1-2
+```
+
+In order to access devices as non-root user we need to add the local user to the `dialout` group and add a udev rule:
+```bash
+sudo usermod -a -G dialout $USER
+
+# logout / reboot
+
+# Add udev rule:
+sudo touch /etc/udev/rules.d/99-libftdi.rules
+# Add this line:
+# SUBSYSTEMS=="usb", ATTRS{idVendor}=="0403", GROUP="dialout", MODE="0660"
+```
+
+### Python Library
+
+To install the library, ensure 3.8 <= Python <= 3.11.
 
 First, clone the repository:
 
