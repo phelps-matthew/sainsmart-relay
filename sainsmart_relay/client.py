@@ -25,7 +25,7 @@ def main():
         choices=range(1, 5),
         nargs="?",
         help="Relay number (1-4), required unless querying status."
-        + " 1=VHF Bias Tee, 2=UHF Bias Tee, 3=VHF Polarization, 4=UHF Polarization",
+        + " 1=UHF Bias Tee, 2=VHF Bias Tee, 3=VHF Polarization, 4=UHF Polarization",
     )
     parser.add_argument(
         "state", choices=["on", "off"], nargs="?", help="State to set the relay to, required unless querying status"
