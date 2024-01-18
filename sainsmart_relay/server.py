@@ -2,8 +2,7 @@ import socket
 import selectors
 import types
 import logging
-import sys
-from sainsmart_relay.relay import FTDIBitbangRelay  # Your class in a separate module
+from sainsmart_relay.relay import FTDIBitbangRelay
 
 # Configure logging at the beginning, so all modules use the same configuration
 logging.basicConfig(
@@ -27,7 +26,6 @@ def service_connection(key, mask, sel, relay):
     if mask & selectors.EVENT_READ:
         recv_data = sock.recv(1024)  # Should be ready to read
         if recv_data:
-            # Here, you can parse the command and interact with the FTDI device
             data.outb += perform_relay_action(recv_data, relay)
         else:
             logging.info("Closing connection to %s", data.addr)
